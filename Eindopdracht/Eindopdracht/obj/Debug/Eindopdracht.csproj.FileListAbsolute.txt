@@ -1,0 +1,16 @@
+C:\Users\thoma\source\repos\Eindopdracht\Eindopdracht\bin\Debug\Eindopdracht.exe.config
+C:\Users\thoma\source\repos\Eindopdracht\Eindopdracht\bin\Debug\Eindopdracht.exe
+C:\Users\thoma\source\repos\Eindopdracht\Eindopdracht\bin\Debug\Eindopdracht.pdb
+C:\Users\thoma\source\repos\Eindopdracht\Eindopdracht\obj\Debug\Eindopdracht.Properties.Resources.resources
+C:\Users\thoma\source\repos\Eindopdracht\Eindopdracht\obj\Debug\Eindopdracht.csproj.GenerateResource.cache
+C:\Users\thoma\source\repos\Eindopdracht\Eindopdracht\obj\Debug\Eindopdracht.csproj.CoreCompileInputs.cache
+C:\Users\thoma\source\repos\Eindopdracht\Eindopdracht\obj\Debug\Eindopdracht.exe
+C:\Users\thoma\source\repos\Eindopdracht\Eindopdracht\obj\Debug\Eindopdracht.pdb
+C:\Users\thoma\source\repos\Eindopdracht\Eindopdracht\obj\Debug\Eindopdracht.SplashScreen.resources
+C:\Users\thoma\source\repos\Eindopdracht\Eindopdracht\obj\Debug\Eindopdracht.csprojAssemblyReference.cache
+C:\Users\thoma\source\repos\Eindopdracht\Eindopdracht\obj\Debug\Eindopdracht.MainPage.resources
+C:\Users\thoma\source\repos\Eindopdracht\Eindopdracht\bin\Debug\Newtonsoft.Json.dll
+C:\Users\thoma\source\repos\Eindopdracht\Eindopdracht\bin\Debug\System.Net.Http.Formatting.dll
+C:\Users\thoma\source\repos\Eindopdracht\Eindopdracht\bin\Debug\Newtonsoft.Json.xml
+C:\Users\thoma\source\repos\Eindopdracht\Eindopdracht\bin\Debug\System.Net.Http.Formatting.xml
+C:\Users\thoma\source\repos\Eindopdracht\Eindopdracht\obj\Debug\Eindopdracht.csproj.CopyComplete
