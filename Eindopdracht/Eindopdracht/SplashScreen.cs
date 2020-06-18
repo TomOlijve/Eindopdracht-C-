@@ -20,7 +20,7 @@ namespace Eindopdracht
             this.Height = 300;
             this.Width = 500;
             this.CenterToScreen();
-            splashScreenImage.Image = Image.FromFile("C:/Users/thoma/source/repos/Eindopdracht/Eindopdracht/img/splashscreen.jpg");
+            splashScreenImage.Image = Image.FromFile("../../img/splashscreen.jpg");
             splashScreenImage.Width = this.Width;
             splashScreenImage.Height = this.Height;
             Label centerLabel = new Label() { Text = "Stenden Weerstation", ForeColor = Color.White, BackColor = Color.Transparent, Font = new Font("Arial", 16, FontStyle.Bold), Size = new Size(100, 50), AutoSize = false, TextAlign = ContentAlignment.MiddleCenter, Dock = DockStyle.Fill};

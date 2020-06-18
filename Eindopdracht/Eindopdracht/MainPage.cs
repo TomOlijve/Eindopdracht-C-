@@ -1,125 +1,238 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Data.Common;
-using System.Diagnostics;
 using System.Data.SqlClient;
 using Newtonsoft.Json;
-using System.Dynamic;
-using System.Drawing.Drawing2D;
+using System.IO;
 
 namespace Eindopdracht
 {
     public partial class MainPage : Form
     {
-        private TabControl tabControl { get; set; }
-        private TabPage actueel { get; set; }
-        private TabPage trend { get; set; }
-        private TabPage opties { get; set; }
-        private Timer timer { get; set; }
-        private NotifyIcon notifyIcon { get; set; }
-        private string city { get; set; }
-        private Label currentTemperature;
-        private Label currentHumidity;
-        private Label currentWeatherInfo;
-        private Label lastUpdated;
-        private string temperatureUnit;
+        public Timer Timer { get; set; }
+        public string Location { get; set; }
+        public int Interval { get; set; }
+        public string TemperatureUnit { get; set; }
+        public About About { get; set; }
+        public Timer UpdateTimer { get; set; }
+        private WeatherUpdater WeatherUpdater { get; set; }
+        public double Temperature { get; set; }
 
         public MainPage()
         {
             InitializeComponent();
-            this.Height = 480;
-            this.Width = 720;
+            // centered de applicatie en zorgt ervoor dat de maximize knop niet meer beschikbaar is
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.CenterToScreen();
-            this.tabControl = new TabControl() { Height = this.Height, Width = this.Width };
-            this.Controls.Add(tabControl);
-            this.actueel = new TabPage() { Height = this.Height, Width = this.Width, Text = "Actueel", BackColor = Color.FromArgb(90, 90, 90) };
-            this.trend = new TabPage() { Height = this.Height, Width = this.Width, Text = "Trend", BackColor = Color.FromArgb(90, 90, 90) };
-            this.opties = new TabPage() { Height = this.Height, Width = this.Width, Text = "Opties", BackColor = Color.FromArgb(90, 90, 90) };
-            this.tabControl.Controls.Add(actueel);
-            this.currentTemperature = new Label() { Location = new Point(50, 50), Font = new Font("Arial", 12), ForeColor = Color.White };
-            this.currentHumidity = new Label() { Location = new Point(50, 100), Font = new Font("Arial", 12), ForeColor = Color.White };
-            this.currentWeatherInfo = new Label() { Location = new Point(50, 150), Font = new Font("Arial", 12), AutoSize = true, ForeColor = Color.White };
-            this.lastUpdated = new Label() { Location = new Point(50, 200), Font = new Font("Arial", 12), AutoSize = true, ForeColor = Color.White };
-            this.actueel.Controls.Add(currentTemperature);
-            this.actueel.Controls.Add(currentHumidity);
-            this.actueel.Controls.Add(currentWeatherInfo);
-            this.actueel.Controls.Add(lastUpdated);
-            this.tabControl.Controls.Add(trend);
-            this.tabControl.Controls.Add(opties);
-            this.city = "Emmen";
-            GetWeather();
-            Timer timer = new Timer();
-            timer.Tick += Timer_Update;
-            timer.Interval = 5000;
-            timer.Start();
+            GetSettings();
+            FillChart();
+            // maakt de klasse aan die de weerinformatie opvraagt
+            this.WeatherUpdater = new WeatherUpdater();
+            UpdateWeather ();
+            //start de timer die de weerinformatie update en het naar de database stuurt
+            this.UpdateTimer = new Timer();
+            this.UpdateTimer.Tick += Timer_Update;
+            this.UpdateTimer.Interval = this.Interval;
+            this.UpdateTimer.Start();
         }
 
-        public void Timer_Update(Object sender, EventArgs e)
+        // haalt de settings uit het json bestand en update de fields en radiobuttons
+        public void GetSettings()
         {
-            GetWeather();
-        }
-
-        public void GetWeather()
-        {
-            using (WebClient web = new WebClient())
+            // haalt de instellingen uit het json bestand
+            string settingsJsonLocation = File.ReadAllText("../../Settings.Json");
+            dynamic settingsJson = JsonConvert.DeserializeObject<dynamic>(settingsJsonLocation);
+            // update de field en de radiobuttons
+            this.Location = settingsJson["location"];
+            this.TemperatureUnit = settingsJson["temperatureUnit"];
+            if(this.TemperatureUnit == "C")
             {
-                string url = string.Format("http://api.openweathermap.org/data/2.5/weather?q={0}&appid=7ac08a4eba5dccaf673f2c1666889e97&units=metric&cnt=6", this.city);
-                var json = web.DownloadString(url);
-                dynamic dynamicJson = JsonConvert.DeserializeObject<dynamic>(json);
-                string temp = dynamicJson["main"]["temp"].ToString();
-                string humidity = dynamicJson["main"]["humidity"].ToString();
-                string mainWeatherInfo = dynamicJson["weather"][0]["main"].ToString();
-                string descriptionWeatherInfo = dynamicJson["weather"][0]["description"].ToString();
-                if (temperatureUnit == "fahrenheit")
+                this.temperatureUnit_Celsius.Checked = true;
+            }
+            else
+            {
+                this.temperatureUnit_Fahrenheit.Checked = true;
+            }
+            this.Interval = settingsJson["interval"];
+        }
+
+        // update de instellingen als er op de knop wordt geklikt in opties
+        public void UpdateSettings(Object sender, EventArgs e)
+        {
+            // checkt of de invoervelden niet leeg zijn
+            if(this.locationInput.Text != "" && this.intervalInput.Text != "")
+            {
+                // update het json bestand en de fields
+                string settingsJsonLocation = File.ReadAllText("../../Settings.Json");
+                dynamic settingsJson = JsonConvert.DeserializeObject<dynamic>(settingsJsonLocation);
+                settingsJson["location"] = this.locationInput.Text;
+                this.Location = this.locationInput.Text;
+                settingsJson["interval"] = int.Parse(this.intervalInput.Text) * 1000;
+                this.Interval = int.Parse(this.intervalInput.Text) * 1000;
+                this.UpdateTimer.Interval = this.Interval;
+                if (this.temperatureUnit_Celsius.Checked)
                 {
-                    this.currentTemperature.Text = ((Convert.ToDouble(temp) * 1.8) + 32).ToString() + " °F";
+                    settingsJson["temperatureUnit"] = "C";
+                    this.TemperatureUnit = "C";
                 }
                 else
                 {
-                    this.currentTemperature.Text = temp + " °C";
+                    settingsJson["temperatureUnit"] = "F";
+                    this.TemperatureUnit = "F";
                 }
-                this.currentHumidity.Text = humidity;
-                this.currentWeatherInfo.Text = mainWeatherInfo + ", " + descriptionWeatherInfo;
-                this.lastUpdated.Text = DateTime.Now.ToString();
-                try
-                {
-                    string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\thoma\OneDrive\Documenten\StendenWeerStation.mdf;Integrated Security=True;Connect Timeout=30";
-                    SqlConnection conn = new SqlConnection(connectionString);
-                    conn.Open();
-
-                    Console.WriteLine(Convert.ToDecimal(temp));
-                    SqlCommand insertIntoDatabase = new SqlCommand("AddToDatabase", conn);
-                    insertIntoDatabase.CommandType = CommandType.StoredProcedure;
-                    insertIntoDatabase.Parameters.AddWithValue("@Temperature", Convert.ToDecimal(temp));
-                    insertIntoDatabase.Parameters.AddWithValue("@DateTime", DateTime.Now);
-                    insertIntoDatabase.Parameters.AddWithValue("@Location", this.city);
-                    insertIntoDatabase.ExecuteNonQuery();
-                    SqlCommand deleteFromDatabaseOlderThan5Days = new SqlCommand("DeleteRowsOlderThan5Days", conn);
-                    deleteFromDatabaseOlderThan5Days.CommandType = CommandType.StoredProcedure;
-                    deleteFromDatabaseOlderThan5Days.ExecuteNonQuery();
-                    conn.Close();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
+                // schrijft de veranderingen naar het json bestand
+                string settingsJsonSerialized = JsonConvert.SerializeObject(settingsJson);
+                File.WriteAllText("../../Settings.json", settingsJsonSerialized);
+                WeatherUpdater.GetWeather(this.Location, this.TemperatureUnit); 
+            }
+            else
+            {
+                // laat een messagebox zien als de velden niet ingevuld zijn
+                System.Windows.Forms.MessageBox.Show("vul alle invoervelden in");
             }
         }
-        private void MainPage_FormClosed(object sender, FormClosedEventArgs e)
+
+        // deze functie wordt aangeroepen door de timer bij de tick
+        public void Timer_Update(Object sender, EventArgs e)
         {
-            
+            // update het weer in de app en het notifyicon
+            UpdateWeather();
+            // update de chart als mainform open is
+            if(this.Visible == true)
+            {
+                UpdateChart();
+            }
+        }
+
+        // update het weer in de applicatie
+        public void UpdateWeather()
+        {
+            // vraagt het weer op basis van de locatie en welke temperatuur eenheid er wordt gebruikt
+            var weatherUpdateValues = WeatherUpdater.GetWeather(this.Location, this.TemperatureUnit);
+            // als de temperatuureinheid fahrenheit is wordt celsius omgerekend naar fahrenheit
+            if (TemperatureUnit == "F")
+            {
+                 this.Temperature = ((weatherUpdateValues.temp * 1.8) + 32);
+            }
+            else
+            {
+                this.Temperature = weatherUpdateValues.temp;
+            }
+            // update de labels en de icon in actueel en het weer in de notifyicon
+            this.currentTemperature.Text = this.Temperature + " °" + this.TemperatureUnit;
+            this.currentHumidity.Text = weatherUpdateValues.humidity;
+            this.currentWeatherInfo.Text = weatherUpdateValues.mainWeatherInfo + ", " + weatherUpdateValues.descriptionWeatherInfo;
+            this.currentWindDirection.Text = weatherUpdateValues.windDirection;
+            this.currentWindSpeed.Text = weatherUpdateValues.windSpeed.ToString();
+            this.lastUpdated.Text = DateTime.Now.ToString();
+            this.currentLocation.Text = this.Location;
+            this.contextMenu.Items["currentTemperatureToolStripMenuItem"].Text = "Temperature: " + this.Temperature + " °" + this.TemperatureUnit;
+            // vraagt de afbeelding op van de icon 
+            var iconRequest = WebRequest.Create("http://openweathermap.org/img/w/" +  weatherUpdateValues.icon + ".png");
+            using (var iconResponse = iconRequest.GetResponse())
+            using (var iconStream = iconResponse.GetResponseStream())
+            {
+                this.currentIcon.Image = Bitmap.FromStream(iconStream);
+            }
+        }
+
+        // vult de chart met de informatie uit de database
+        public void FillChart()
+        {
+            // verbinding met de database maken
+            string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\thoma\OneDrive\Documenten\StendenWeerStation.mdf;Integrated Security=True;Connect Timeout=30";
+            SqlConnection conn = new SqlConnection(connectionString);
+            conn.Open();
+            // dit haalt de temperatuur uit de database van de afgelopen 5 dagen op de locatie die de gebruiker heeft ingesteld
+            SqlCommand getWeatherFromDb = new SqlCommand("GetChartData", conn);
+            getWeatherFromDb.CommandType = CommandType.StoredProcedure;
+            getWeatherFromDb.Parameters.AddWithValue("@Location", this.Location);
+            var reader = getWeatherFromDb.ExecuteReader();
+            // zet de x as in het formaat dd-mm-yyyy
+            chart.ChartAreas[0].AxisX.LabelStyle.Format = "dd-mm-yyyy";
+            chart.ChartAreas[0].AxisX.LabelStyle.IsEndLabelVisible = true;
+            chart.ChartAreas[0].AxisY.LabelStyle.IsEndLabelVisible = true;
+            chart.ChartAreas[0].AxisX.Maximum = 5;
+            chart.ChartAreas[0].AxisX.Minimum = 1;
+            // zet de punten in de chart
+            while (reader.Read())
+            {
+                string date = reader["Date"].ToString().Split()[0];
+                Console.WriteLine(date);
+                chart.Series["Temperature"].Points.AddXY(date, reader["Temp"]);
+            }
+            conn.Close();
+        }
+
+        //update de chart door eerst de punten te verwijderen en dan de punten weer in te voeren
+        public void UpdateChart()
+        {
+            this.chart.Series["Temperature"].Points.Clear();
+            FillChart();
+        }
+
+        // als de form wordt afgesloten wordt de applicatie niet afgesloten zodat de notifyicon nog steeds zichtbaar blijft
+        private void MainPage_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // canceled het afsluiten van de appliatie
+            if(e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+                Hide();
+            }
+            this.ShowInTaskbar = false;
+            notifyIcon1.Visible = true;
+        }
+
+        // ververst het weer in de applicatie
+        private void verversenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UpdateWeather();
+        }
+
+        // brengt de gebruiker naar het opties tablad
+        private void optiesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Visible = true;
+            this.ShowInTaskbar = true;
+            tabControl.SelectTab("opties");
+        }
+
+        // opent de applicatie
+        private void openenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Visible = true;
+            this.ShowInTaskbar = true;
+        }
+           
+        // sluit de applicatie
+        private void sluitenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(this.Visible)
+            {
+                this.Close();
+            }
+            System.Windows.Forms.Application.Exit();
+        }
+
+        // opent het over form
+        private void overToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // opent de about alleen als hij nog niet open is
+            if(this.About == null)
+            {
+                this.About = new About();
+                this.About.Visible = true;
+            }
+            //als de about als open is wordt hij naar voren gebracht
+            else
+            {
+                this.About.WindowState = FormWindowState.Normal;
+                this.About.Focus();
+            }
         }
     }
 }
