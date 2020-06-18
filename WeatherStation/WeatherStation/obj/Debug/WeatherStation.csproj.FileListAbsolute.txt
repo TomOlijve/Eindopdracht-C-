@@ -1,0 +1,33 @@
+C:\Users\teren\Documents\Visual Studio 2015\Projects\Weather Station\WeatherStation\WeatherStation\bin\Debug\WeatherStation.exe.config
+C:\Users\teren\Documents\Visual Studio 2015\Projects\Weather Station\WeatherStation\WeatherStation\bin\Debug\WeatherStation.exe
+C:\Users\teren\Documents\Visual Studio 2015\Projects\Weather Station\WeatherStation\WeatherStation\bin\Debug\WeatherStation.pdb
+C:\Users\teren\Documents\Visual Studio 2015\Projects\Weather Station\WeatherStation\WeatherStation\obj\Debug\WeatherStation.csprojResolveAssemblyReference.cache
+C:\Users\teren\Documents\Visual Studio 2015\Projects\Weather Station\WeatherStation\WeatherStation\obj\Debug\WeatherStation.AboutBox1.resources
+C:\Users\teren\Documents\Visual Studio 2015\Projects\Weather Station\WeatherStation\WeatherStation\obj\Debug\WeatherStation.Form1.resources
+C:\Users\teren\Documents\Visual Studio 2015\Projects\Weather Station\WeatherStation\WeatherStation\obj\Debug\WeatherStation.Properties.Resources.resources
+C:\Users\teren\Documents\Visual Studio 2015\Projects\Weather Station\WeatherStation\WeatherStation\obj\Debug\WeatherStation.csproj.GenerateResource.Cache
+C:\Users\teren\Documents\Visual Studio 2015\Projects\Weather Station\WeatherStation\WeatherStation\obj\Debug\WeatherStation.exe
+C:\Users\teren\Documents\Visual Studio 2015\Projects\Weather Station\WeatherStation\WeatherStation\obj\Debug\WeatherStation.pdb
+C:\Users\teren\Documents\Visual Studio 2015\Projects\Weather Station\WeatherStation\WeatherStation\obj\Debug\WeatherStation.Form2.resources
+C:\Users\teren\Documents\Visual Studio 2015\Projects\Weather Station\WeatherStation\WeatherStation\bin\Debug\Newtonsoft.Json.dll
+C:\Users\teren\Documents\Visual Studio 2015\Projects\Weather Station\WeatherStation\WeatherStation\bin\Debug\Newtonsoft.Json.xml
+C:\Users\teren\Documents\Visual Studio 2015\Projects\Weather Station\WeatherStation\WeatherStation\bin\Debug\NPlot.dll
+C:\Users\teren\Documents\Visual Studio 2015\Projects\Weather Station\WeatherStation\WeatherStation\bin\Debug\NPlot.xml
+C:\Users\teren\Documents\Visual Studio 2015\Projects\Weather Station\WeatherStation\WeatherStation\bin\Debug\MySql.Data.dll
+C:\Users\teren\Documents\Visual Studio 2015\Projects\Weather Station\WeatherStation\WeatherStation\bin\Debug\MySql.Data.Entity.EF6.dll
+C:\xampp\htdocs\WeatherStation\WeatherStation\WeatherStation\bin\Debug\WeatherStation.exe.config
+C:\xampp\htdocs\WeatherStation\WeatherStation\WeatherStation\bin\Debug\WeatherStation.exe
+C:\xampp\htdocs\WeatherStation\WeatherStation\WeatherStation\bin\Debug\WeatherStation.pdb
+C:\xampp\htdocs\WeatherStation\WeatherStation\WeatherStation\bin\Debug\Newtonsoft.Json.dll
+C:\xampp\htdocs\WeatherStation\WeatherStation\WeatherStation\bin\Debug\Newtonsoft.Json.xml
+C:\xampp\htdocs\WeatherStation\WeatherStation\WeatherStation\bin\Debug\NPlot.xml
+C:\xampp\htdocs\WeatherStation\WeatherStation\WeatherStation\obj\Debug\WeatherStation.csprojAssemblyReference.cache
+C:\xampp\htdocs\WeatherStation\WeatherStation\WeatherStation\obj\Debug\WeatherStation.AboutBox1.resources
+C:\xampp\htdocs\WeatherStation\WeatherStation\WeatherStation\obj\Debug\WeatherStation.Form1.resources
+C:\xampp\htdocs\WeatherStation\WeatherStation\WeatherStation\obj\Debug\WeatherStation.Form2.resources
+C:\xampp\htdocs\WeatherStation\WeatherStation\WeatherStation\obj\Debug\WeatherStation.Properties.Resources.resources
+C:\xampp\htdocs\WeatherStation\WeatherStation\WeatherStation\obj\Debug\WeatherStation.csproj.GenerateResource.cache
+C:\xampp\htdocs\WeatherStation\WeatherStation\WeatherStation\obj\Debug\WeatherStation.csproj.CoreCompileInputs.cache
+C:\xampp\htdocs\WeatherStation\WeatherStation\WeatherStation\obj\Debug\WeatherStation.csproj.CopyComplete
+C:\xampp\htdocs\WeatherStation\WeatherStation\WeatherStation\obj\Debug\WeatherStation.exe
+C:\xampp\htdocs\WeatherStation\WeatherStation\WeatherStation\obj\Debug\WeatherStation.pdb

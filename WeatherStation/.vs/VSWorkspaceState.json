@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\packages",
+    "\\WeatherStation",
+    "\\WeatherStation\\bin",
+    "\\WeatherStation\\bin\\Debug",
+    "\\WeatherStation\\bin\\Release",
+    "\\WeatherStation\\obj",
+    "\\WeatherStation\\obj\\Debug",
+    "\\WeatherStation\\obj\\Release",
+    "\\WeatherStation\\Properties"
+  ],
+  "SelectedNode": "\\WeatherStation\\Form1.cs",
+  "PreviewInSolutionExplorer": false
+}
